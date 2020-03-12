@@ -28,7 +28,7 @@ def upload():
     img.save(imgByteArr, format='JPEG')
     imgByteArr = imgByteArr.getvalue()
     #返回图片
-    resp = Response(imgByteArr, mimetype="image/jpeg", status=200)
+    resp = Response(imgByteArr, mimetype="image/jpeg")
     return resp
 
 if __name__ == '__main__':
