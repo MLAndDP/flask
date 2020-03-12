@@ -25,6 +25,7 @@ def upload():
     # img = cv2.read
     #TODO 调用神经网络
     # img = model(img)
+    img = Image.fromarray(img)
     print(img)
     #返回图片
     resp = Response(img, mimetype="image/jpeg")
