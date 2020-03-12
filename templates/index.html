@@ -66,11 +66,11 @@
             contentType: false, //必须
             success: function (result) {
 
-                $('#testimg').attr('src', 'data:image/png;base64,' + result);
+                $('#testimg').attr('src', 'data:image/jpeg;base64,' + result);
             },
             error: function (result) {
                 console.log(result.get)
-                $('#testimg').attr('src', 'data:image/png;base64,' + result);
+                $('#testimg').attr('src', 'data:image/jpeg,' + result);
             }
         })
     }
