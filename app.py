@@ -4,6 +4,7 @@ import torch
 from mmdet.apis import inference_detector, init_detector, show_result
 import numpy
 from PIL import Image
+from gevent import pywsgi
 app = Flask(__name__)
 model = init_detector(
         "../configs/pascal_voc/faster_rcnn_r50_fpn_1x_voc0712.py", "../faster_rcnn_r50_fpn_1x_voc0712_cpu-0c36e0a3.pth", device=torch.device('cuda', 0))
@@ -30,4 +31,5 @@ def upload():
     return resp
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    server = pywsgi.WSGIServer(('0.0.0.0', 5000), app)
+    server.serve_forever()
