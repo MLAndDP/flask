@@ -19,16 +19,16 @@ def upload():
     # 获取图片文件 name = upload
     img = request.files['file']
     img = Image.open(img)
-    img = numpy.array(img)
+    img = numpy.asarray(img)
     result = inference_detector(model, img)
     img = show_result(img, result, model.CLASSES, score_thr=0.5, wait_time=1, show=False)
     # img = cv2.read
     #TODO 调用神经网络
     # img = model(img)
-    img = Image.fromarray(img)
+    img = Image.fromarray(numpy.uint8(img))
     print(img)
     #返回图片
-    resp = Response(img, mimetype="image/jpeg")
+    resp = Response(img, mimetype="image/jpg")
     return resp
 
 if __name__ == '__main__':
