@@ -32,5 +32,5 @@ def upload():
     return resp
 
 if __name__ == '__main__':
-    server = pywsgi.WSGIServer(('0.0.0.0', 5000), app)
+    server = pywsgi.WSGIServer(('0.0.0.0', 10055), app)
     server.serve_forever()
