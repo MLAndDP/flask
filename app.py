@@ -20,18 +20,14 @@ def upload():
     img = request.files['file']
     img = Image.open(img)
     img = numpy.asarray(img)
-    print(type(img))
     result = inference_detector(model, img)
-    print(type(result))
-    print(type(img))
     img = show_result(img, result, model.CLASSES, score_thr=0.5, wait_time=1, show=False)
-    print(type(img))
     img = Image.fromarray(numpy.uint8(img))
-    print(type(img))
-    print(img)
+    img.save("/home/yons/aaa.jpeg")
+    img.save("/home/yons/aaa.jpg")
     #返回图片
-    resp = Response(img, mimetype="image/jpg")
-    return resp
+    # resp = Response(img, mimetype="image/jpeg")
+    return "success"
 
 if __name__ == '__main__':
     server = pywsgi.WSGIServer(('0.0.0.0', 5000), app)
