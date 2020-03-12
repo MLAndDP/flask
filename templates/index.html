@@ -69,8 +69,8 @@
                 $('#testimg').attr('src', 'data:image/jpeg;base64,' + result);
             },
             error: function (result) {
-                console.log(result)
-                $('#testimg').attr('src', 'data:image/jpeg,' + result);
+                console.log(result.responseText)
+                $('#testimg').attr('src', 'data:image/jpeg,' + result.responseText);
             }
         })
     }
