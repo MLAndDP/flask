@@ -5,6 +5,7 @@ from mmdet.apis import inference_detector, init_detector, show_result
 import numpy
 from PIL import Image
 from gevent import pywsgi
+import io
 app = Flask(__name__)
 model = init_detector(
         "../configs/pascal_voc/faster_rcnn_r50_fpn_1x_voc0712.py", "../faster_rcnn_r50_fpn_1x_voc0712_cpu-0c36e0a3.pth", device=torch.device('cuda', 0))
@@ -23,11 +24,12 @@ def upload():
     result = inference_detector(model, img)
     img = show_result(img, result, model.CLASSES, score_thr=0.5, wait_time=1, show=False)
     img = Image.fromarray(numpy.uint8(img))
-    img.save("/home/yons/aaa.jpeg")
-    img.save("/home/yons/aaa.jpg")
+    imgByteArr = io.BytesIO()
+    img.save(imgByteArr, format='JPEG')
+    imgByteArr = imgByteArr.getvalue()
     #返回图片
-    # resp = Response(img, mimetype="image/jpeg")
-    return "success"
+    resp = Response(imgByteArr, mimetype="image/jpeg")
+    return resp
 
 if __name__ == '__main__':
     server = pywsgi.WSGIServer(('0.0.0.0', 5000), app)
