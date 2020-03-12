@@ -21,7 +21,7 @@ def upload():
     img = Image.open(img)
     img = numpy.array(img)
     result = inference_detector(model, img)
-    img = show_result(img, result, model.CLASSES, score_thr=0.5, wait_time=1)
+    img = show_result(img, result, model.CLASSES, score_thr=0.5, wait_time=1, show=False)
     # img = cv2.read
     #TODO 调用神经网络
     # img = model(img)
