@@ -66,22 +66,11 @@
             contentType: false, //必须
             success: function (result) {
 
-                var img = document.createElement("img");
-                img.onload = function (e) {
-                    window.URL.revokeObjectURL(img.src);
-                };
-                img.src = window.URL.createObjectURL(result);
-                $(".head").html(img);
+                $('#testimg').attr('src', 'data:image/png;base64,' + result);
             },
             error: function (result) {
-                console.log(result)
-                {#alert("上传失败!");#}
-                //alert("error:" + textStatus + errorThrown + ":" + JSON.stringify(xmlrequest));
-                var img = document.createElement("img");
-                img.onload = function (e) {
-                    window.URL.revokeObjectURL(img.src);
-                };
-                img.src = window.URL.createObjectURL(result);
+                console.log(result.get)
+                $('#testimg').attr('src', 'data:image/png;base64,' + result);
             }
         })
     }
@@ -99,9 +88,7 @@
             <input id="btn_upload" type="button" value="上传" onclick="postData();" class="file"
                    style="float:right;width:65px; height: 33px;left: 4px;background-color:rgba(255, 206, 68, 0.6);cursor:hand;margin-top:5px;margin-bottom:5px;margin-right:5px;border-color:red"/>
         </div>
-        <div class="head">
-
-        </div>
+        <img id="testimg" src="" alt="">
     </div>
 </div>
 </body>
