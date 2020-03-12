@@ -6,6 +6,7 @@ import numpy
 from PIL import Image
 from gevent import pywsgi
 import io
+import base64
 app = Flask(__name__)
 model = init_detector(
         "../configs/pascal_voc/faster_rcnn_r50_fpn_1x_voc0712.py", "../faster_rcnn_r50_fpn_1x_voc0712_cpu-0c36e0a3.pth", device=torch.device('cuda', 0))
@@ -28,7 +29,7 @@ def upload():
     img.save(imgByteArr, format='JPEG')
     imgByteArr = imgByteArr.getvalue()
     #返回图片
-    resp = Response(imgByteArr, mimetype="image/jpeg")
+    resp = Response(base64.b64encode(imgByteArr), mimetype="image/jpeg")
     return resp
 
 if __name__ == '__main__':
