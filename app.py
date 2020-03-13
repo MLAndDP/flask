@@ -23,13 +23,15 @@ def upload():
     img = Image.open(img)
     img = numpy.asarray(img)
     result = inference_detector(model, img)
+    for i in result:
+        print(i)
     img = show_result(img, result, model.CLASSES, score_thr=0.9, wait_time=1, show=False)
     img = Image.fromarray(numpy.uint8(img))
     imgByteArr = io.BytesIO()
     img.save(imgByteArr, format='JPEG')
     imgByteArr = imgByteArr.getvalue()
     #返回图片
-    resp = Response(base64.b64encode(imgByteArr), mimetype="image/jpeg")
+    resp = Response(base64.b64encode(imgByteArr), mimetype="application/text")
     return resp
 
 if __name__ == '__main__':
