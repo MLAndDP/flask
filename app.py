@@ -23,7 +23,7 @@ def upload():
     img = Image.open(img)
     img = numpy.asarray(img)
     result = inference_detector(model, img)
-    img = show_result(img, result, model.CLASSES, score_thr=0.5, wait_time=1, show=False)
+    img = show_result(img, result, model.CLASSES, score_thr=0.9, wait_time=1, show=False)
     img = Image.fromarray(numpy.uint8(img))
     imgByteArr = io.BytesIO()
     img.save(imgByteArr, format='JPEG')
