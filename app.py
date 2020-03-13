@@ -9,7 +9,7 @@ import io
 import base64
 app = Flask(__name__)
 model = init_detector(
-        "../configs/pascal_voc/faster_rcnn_r50_fpn_1x_voc0712.py", "../faster_rcnn_r50_fpn_1x_voc0712_cpu-0c36e0a3.pth", device=torch.device('cuda', 0))
+        "/home/yons/zhengxin/mmdetection/configs/pascal_voc/faster_rcnn_r50_fpn_1x_voc0712.py", "/home/yons/zhengxin/mmdetection/faster_rcnn_r50_fpn_1x_voc0712-acc8ede0.pth", device=torch.device('cuda', 0))
 # model = torch.load()
 @app.route('/')
 def hello_world():
