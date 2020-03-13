@@ -24,7 +24,7 @@ def upload():
     img = numpy.asarray(img)
     result = inference_detector(model, img)
     for i in result:
-        print(i)
+        app.logger.info(i)
     img = show_result(img, result, model.CLASSES, score_thr=0.9, wait_time=1, show=False)
     img = Image.fromarray(numpy.uint8(img))
     imgByteArr = io.BytesIO()
