@@ -24,7 +24,7 @@ import cv2
     subtype：Code stream type.(subtype=0|1).
 """
 if __name__ == '__main__':
-    cap = cv2.VideoCapture("rtsp://user:passwd@127.0.0.1:554/h264/ch1/main/av_stream")
+    cap = cv2.VideoCapture("rtsp://admin:123456@192.168.1.10:554/h264/ch1/main/av_stream")
     while cap.isOpened():
         success, frame = cap.read()
         cv2.imshow("frame", frame)
