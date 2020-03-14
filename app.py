@@ -35,6 +35,7 @@ def upload():
     resp = Response(base64.b64encode(imgByteArr), mimetype="application/text")
     return resp
 
+
 if __name__ == '__main__':
     app.debug = True
     server = pywsgi.WSGIServer(('0.0.0.0', 10055), app)
