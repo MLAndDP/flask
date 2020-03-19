@@ -66,12 +66,14 @@
             contentType: false, //必须
             success: function (result) {
 
-                $('#testimg').attr('src', 'data:image/jpeg;base64,' + result);
+                $('#testimg').attr('src', 'data:image/jpeg;base64,' + result.img);
+                $('#num').html("当前人数为：" + result.num)
             },
             error: function (result) {
                 console.log(result)
-                console.log(result.responseText)
-                $('#testimg').attr('src', 'data:image/jpeg;base64,' + result.responseText);
+                {#console.log(result.responseText)#}
+                $('#testimg').attr('src', 'data:image/jpeg;base64,' + result.img);
+                $('#num').html(result.num)
             }
         })
     }
@@ -90,6 +92,7 @@
                    style="float:right;width:65px; height: 33px;left: 4px;background-color:rgba(255, 206, 68, 0.6);cursor:hand;margin-top:5px;margin-bottom:5px;margin-right:5px;border-color:red"/>
         </div>
         <img id="testimg" src="" alt="">
+        <div id="num"></div>
     </div>
 </div>
 </body>
