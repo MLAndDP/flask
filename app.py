@@ -33,18 +33,22 @@ class CountDownLatch:
 
 app = Flask(__name__)
 CORS(app, resources=r'/*')
+
 @app.route('/')
 def hello_world():
     # 获取图片文件 name = upload
     return render_template('index.html', name="demo")
 
+@app.route('/hello')
+def hello():
+    # 获取图片文件 name = upload
+    return "hello"
 @app.route('/upload', methods=['POST'],strict_slashes=False)
 def upload():
     # 获取图片文件 name = upload
     img = request.files['file']
     img = Image.open(img)
     list = [[0 for i in range(4)] for j in range(5)]
-    print(list)
     count = CountDownLatch(20)
     cutAndDetect(img, list, 1094, 912, count)
     count.waiting()
@@ -66,7 +70,7 @@ def cutAndDetect(im, list, vx, vy, count):
             yNum += 1
             y1 = y1 + dy
             y2 = y1 + vy
-        yNum = 1
+        yNum = 0
         xNum += 1
         x1 = x1 + dx
         x2 = x1 + vx

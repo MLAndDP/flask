@@ -64,6 +64,7 @@ new Vue({
         _this.img = reader.result
       }
       let formFile = new FormData()
+
       formFile.append('file', file) //加入文件对象
       const loading = this.$loading({
         lock: true,
@@ -77,7 +78,7 @@ new Vue({
         data: formFile,
         type: 'post',
         dataType: 'json',
-        timeout: 30000,
+        timeout: 300000,
         cache: false,//上传文件无需缓存
         processData: false,//用于对data参数进行序列化处理 这里必须false
         contentType: false, //必须
