@@ -2,99 +2,102 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>{{ name }}</title>
+    <title>上传</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename = 'index.css') }}">
     <style type="text/css">
-        .file {
-            position: relative;
-            display: inline-block;
-            background: #D0EEFF;
-            border: 1px solid #99D3F5;
-            border-radius: 4px;
-            padding: 4px 12px;
-            overflow: hidden;
-            color: #1E88C7;
-            text-decoration: none;
-            text-indent: 0;
-            line-height: 20px;
-        }
-
-        .file input {
-            position: absolute;
-            font-size: 100px;
-            right: 0;
-            top: 0;
+        img[src=""], img:not([src]) {
             opacity: 0;
-        }
-
-        .file:hover {
-            background: #AADFFD;
-            border-color: #78C3F3;
-            color: #004974;
-            text-decoration: none;
         }
     </style>
 </head>
-<script src="{{ url_for('static', filename = 'jquery-3.4.1.min.js') }}"></script>
-<script type="text/javascript">
-    function postData() {
-        var fileObj = document.getElementById("FileUpload").files[0]; // js 获取文件对象
-        if (typeof (fileObj) == "undefined" || fileObj.size <= 0) {
-            alert("请选择图片");
-            return;
-        }
-        var formFile = new FormData();
-        formFile.append("file", fileObj); //加入文件对象
-
-        //第一种  XMLHttpRequest 对象
-        //var xhr = new XMLHttpRequest();
-        //xhr.open("post", "/Admin/Ajax/VMKHandler.ashx", true);
-        //xhr.onload = function () {
-        //    alert("上传完成!");
-        //};
-        //xhr.send(formFile);
-
-        //第二种 ajax 提交
-
-        var data = formFile;
-        $.ajax({
-            url: "/upload/",
-            data: data,
-            type: "Post",
-            dataType: "json",
-            cache: false,//上传文件无需缓存
-            processData: false,//用于对data参数进行序列化处理 这里必须false
-            contentType: false, //必须
-            success: function (result) {
-
-                $('#testimg').attr('src', 'data:image/jpeg;base64,' + result.img);
-                $('#num').html("当前人数为：" + result.num)
-            },
-            error: function (result) {
-                console.log(result)
-                {#console.log(result.responseText)#}
-                $('#testimg').attr('src', 'data:image/jpeg;base64,' + result.img);
-                $('#num').html(result.num)
-            }
-        })
-    }
-</script>
-
 <body>
-<div class="divcenter" style="width:1025px">
-    <div style="width:100%;height:600px">
-        <div id="div_torrent" style="overflow:hidden">
-            <a id="btn_file" href="javascript:;" class="file" style="margin-top:5px;margin-bottom:5px;float:left;">选择文件
-                {#                <input type="file" name="FileUpload" id="FileUpload" accept=".torrent">#}
-                <input type="file" name="FileUpload" id="FileUpload" value="" placeholder="免冠照片">
-            </a>
-            <div id="showFileName" style="float:left;margin-top:7px;margin-bottom:5px;"></div>
-            <input id="btn_upload" type="button" value="上传" onclick="postData();" class="file"
-                   style="float:right;width:65px; height: 33px;left: 4px;background-color:rgba(255, 206, 68, 0.6);cursor:hand;margin-top:5px;margin-bottom:5px;margin-right:5px;border-color:red"/>
+<div id="app">
+    <el-upload
+            class="upload-demo"
+            action="#"
+            :show-file-list="false"
+            :http-request="httpRequest"
+            accept="image/gif,image/jpeg,image/jpg,image/bmp,image/png">
+        <el-button size="small" type="primary">选择文件</el-button>
+    </el-upload>
+    <div style="display: flex;">
+        <div style="position: relative;width:30vw;height:45vw;margin-top: 18px;">
+            <div style="position: absolute;transform: rotate(90deg);">
+                <img :src="img" alt=""
+                     style="position: absolute; left: 0;bottom: 0; width: 45vw;height: 30vw;transform: rotate(180deg);border: 0;">
+            </div>
         </div>
-        <img id="testimg" src="" alt="">
-        <div id="num"></div>
+        <div style="position: relative;width:30vw;height:45vw;margin-top: 18px;margin-left: 30vw;">
+            <div style="display: flex;" v-for="(itemList,index) of imgList">
+                <div v-for="(item,i) of itemList" :key="index + '-' + i">
+                    <img :src="'data:image/jpeg;base64,' + item"
+                         style="width: 7.5vw;display:block;">
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>
-
+<script src="{{ url_for('static', filename = 'vue.js') }}"></script>
+<script src="{{ url_for('static', filename = 'index.js') }}"></script>
+<script src="{{ url_for('static', filename = 'jquery-3.2.1.min.js') }}"></script>
+<script>
+new Vue({
+  el: '#app',
+  data: () => {
+    return {
+      flag: false,
+      name: '123',
+      img: '',
+      imgList: []
+    }
+  },
+  created () {
+  },
+  methods: {
+    httpRequest (params) {
+      let _this = this
+      const file = params.file
+      let reader = new FileReader()
+      reader.readAsDataURL(params.file)
+      reader.onload = function () {
+        _this.img = reader.result
+      }
+      let formFile = new FormData()
+      formFile.append('file', file) //加入文件对象
+      const loading = this.$loading({
+        lock: true,
+        text: '正在处理数据中，请稍后...',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
+      _this.imgList = []
+      $.ajax({
+        url: '/upload',
+        data: formFile,
+        type: 'post',
+        dataType: 'json',
+        timeout: 30000,
+        cache: false,//上传文件无需缓存
+        processData: false,//用于对data参数进行序列化处理 这里必须false
+        contentType: false, //必须
+        success: function (result) {
+          _this.imgList = result.img.reverse()
+          _this.$nextTick(() => {
+            loading.close()
+          })
+        },
+        error: function (result, textStatus) {
+          loading.close()
+          if (textStatus === 'timeout') {
+            _this.$message.error('请求超时，请稍后重新请求！')
+          } else {
+            _this.$message.error('上传的图片像素有误，请上传正确像素图片！')
+          }
+        }
+      })
+    }
+  }
+})
+</script>
 </html>
