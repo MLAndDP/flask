@@ -1,7 +1,7 @@
 from flask import Flask
 from flask import request, render_template
 # from mmdet.apis import inference_detector, init_detector, show_result
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 from gevent import pywsgi
 import gevent
 import io
@@ -88,6 +88,38 @@ def check(im, x1, y1, x2, y2, list, i1, i2, count):
     list[i1][i2]=str(base64.b64encode(imgByteArr), encoding="utf-8")
     count.count_down()
 
+
+def pil_draw(im):
+
+    # 2.获取边框坐标
+    # 边框格式　bbox = [xl, yl, xr, yr]
+    bbox1 = [72, 41, 208, 330]
+    label1 = 'man'
+
+    bbox2 = [100, 80, 248, 334]
+    label2 = 'woman'
+
+    # 设置字体格式及大小
+    font = ImageFont.truetype(font='./Gemelli.ttf', size=np.floor(1.5e-2 * np.shape(im)[1] + 15).astype('int32'))
+
+    draw = ImageDraw.Draw(im)
+    # 获取label长宽
+    label_size1 = draw.textsize(label1, font)
+    label_size2 = draw.textsize(label2, font)
+
+    # 设置label起点
+    text_origin1 = np.array([bbox1[0], bbox1[1] - label_size1[1]])
+    text_origin2 = np.array([bbox2[0], bbox2[1] - label_size2[1]])
+
+    # 绘制矩形框，加入label文本
+    draw.rectangle([bbox1[0], bbox1[1], bbox1[2], bbox1[3]], outline='red', width=2)
+    draw.rectangle([tuple(text_origin1), tuple(text_origin1 + label_size1)], fill='red')
+    draw.text(text_origin1, str(label1), fill=(255, 255, 255), font=font)
+
+    draw.rectangle([bbox2[0], bbox2[1], bbox2[2], bbox2[3]], outline='green', width=2)
+    draw.rectangle([tuple(text_origin2), tuple(text_origin2 + label_size2)], fill='green')
+    draw.text(text_origin2, str(label2), fill=(255, 255, 255), font=font)
+    del draw
 
 if __name__ == '__main__':
 
