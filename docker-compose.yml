@@ -1,0 +1,11 @@
+version: "2.3"
+
+services:
+  flask:
+    container_name: flask
+    image: flask
+    restart: always
+    build:
+      context: .
+    ports:
+      - "5000:5000"
